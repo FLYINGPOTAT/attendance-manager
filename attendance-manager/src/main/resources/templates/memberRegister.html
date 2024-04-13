@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <style>
+        .a{
+            width: 120px;
+            height:60px;
+            font-size: 150%; 
+            text-align: left;          
+        }
+        .box {
+            height: 45px;
+            width: 500px;
+            font-size: 150%;
+            text-align: center; 
+        }
+        .moji{
+            font-size: 200%;
+            white-space: nowrap;
+            text-align: left; 
+        }
+        .sousin{
+            height: 50px;
+            width:150px;
+            font-size: 150%;
+            text-align: center; 
+        }
+        .T{
+            text-align: center;
+        }
+    </style>
+    <div class="T">
+    <h1>Register画面</h1>
+    </div>
+    <body2>
+
+        <form action ="/memberRegister" method ="post">
+                <div class=" moji">
+                    <label for="add_grade">学年:</label>
+                </div>
+                <select name="example" class="a">
+                <option value="1">1年生</option>
+                <option value="2">2年生</option>
+                <option value="3">3年生</option>
+                <option value="4">4年生</option>
+                <option value="5">5年生</option>
+                <option value="6">6年生</option>
+                </select>
+            <!--
+        <input type="number" id="add_grade" style="width: 50px;"
+            min="1" max="6"/>
+            -->
+            
+        <div>
+        <label for="add_name" class = "moji" >名前:</label><br>
+        <input type="name" id="add_name"  class = "box">
+        </div><br>
+        <input type="submit" class ="sousin" id="add_button" value="送信"/>
+        </form>
+        </body2>
+</body>
+</html>
