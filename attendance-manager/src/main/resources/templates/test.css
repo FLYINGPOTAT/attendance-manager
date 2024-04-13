@@ -1,0 +1,43 @@
+.div-css{
+    font-size:50px;
+    color:red;
+}
+.body{
+    color: white;
+    background-color: green;
+}
+.h1{
+    font-size:50px;
+    color:red;
+    position:relative;
+    width: 500px;
+    top:10px;
+    text-align: center;
+    margin: auto;
+    background: white;
+    border: 2px skyblue dashed;
+}
+.h2{
+    text-align: center;
+    font-size: 40px;
+
+}
+.head1{
+    font-size: 70px;
+    color: white;
+    float: left;
+}
+.head2{  
+    color:gold; 
+    float: right;  
+}
+.com1{
+    color:white;
+}
+.author{
+    text-align: left;
+    display: inline;
+}
+.ayadato,.dainum,.YushiSeki,.kibamigimi{
+    text-align: center;
+}

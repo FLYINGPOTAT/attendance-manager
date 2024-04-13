@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>出席管理</title>
+    <meta name="description" content="ページの説明文">
+    <link rel="stylesheet"href="test.css">
+</head>
+<body><div class="body">
+    <header>
+        <h1>
+            <div>
+            <span class="head1">
+                MiteMath
+            </span>
+            <a class="head2" href="inquiry.html">
+                問い合わせはこちらから
+            </a>
+            </div>
+        </h1>
+    </header>
+    <br>
+    <br>
+    <br>
+    <h2 class="h2">出欠ポイント設定</h2>
+    <h3>
+        <form action="/register" method="post">
+            出欠：<input type="text" name="attendance" size="10"/><br/>
+            ポイント：<input type="number" name="point" size="10"/><br/><br/>
+            <input type="submit" value="送信" />
+            </form>
+            <ul>
+                <table>
+                    <tr>
+                        <th>attendance</th>
+                        <th>point</th>
+                    </tr>
+                    <tr th:each="t : ${table}">
+                        <td th:text="${t.attendance}"></td>
+                        <td th:text="${t.point}"></td>
+                    </tr>
+                </table>
+            </ul>
+    </h3>
+</div>
+</body>
+</html>
