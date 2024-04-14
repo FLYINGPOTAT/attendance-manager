@@ -25,7 +25,7 @@
 		<a href="/AttendPointSetting">出欠ポイント設定</a>
     </div>
     <div>
-		<table>
+		<table class="table">
 		            <thead>
 		                <script>
 		                    const now=new Date()
@@ -47,6 +47,7 @@
 		                    }
 		                    document.write('<tr>')
 		                    document.write('<th>氏名</th>')
+							document.write('<th>得点</th>')
 		                    color="#b7efb7"
 		                    for (var i=1;i<=monthDayCount;i++){
 		                        if(i==date){
@@ -61,7 +62,7 @@
 		                        }
 		                    }
 		                
-		                    document.write('<th>得点</th>')
+		                    
 		                    document.write('</tr>')
 		                </script>
 		            </thead>
@@ -69,6 +70,7 @@
 		                <th:block th:each="attend: ${memberHistoryData}">
 							<tr>
 							                        <td th:text="${attend.name}"></a></td>
+													<td th:text="${attend.point}"></a></td>
 							                        <th:block th:each="data:${attend.list}">
 							                            <th:block th:if="${data=='未定'}">
 							                                <td></td>
@@ -81,18 +83,6 @@
 		                </th:block>
 		            </tbody>
 		        </table>
-		<table>
-					        <tr>
-					            <th>name</th>
-								<th>point</th>
-					            <th>list</th>
-					        </tr>
-					        <tr th:each="t : ${memberHistoryData}">
-					            <td th:text="${t.name}"></td>
-					            <td th:text="${t.point}"></td>
-								<td th:text="${t.list}"></td>
-					        </tr>
-					    </table>
     </div>
 </body>
 </html>

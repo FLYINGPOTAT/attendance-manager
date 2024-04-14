@@ -26,7 +26,9 @@
     <h2 class="h2">出欠設定(仮)</h2>
     <h3><div class = "h3">
         <form action="/APSetting" method="post">
-            日時：<input type="date" name="date"/><br/><br/>
+			年：<input type="number" name="year" min="1900" max="2100" required/><br/>
+			            月：<input type="number" name="month" min="1" max="12" required/><br/>
+			            日：<input type="number" name="day" min="1" max="31" required/><br/><br/>
             氏名：<select name="name">
                 <!--氏名の集合をデータベースから読み込み、選択肢として表示-->
                 <option th:each="name : &{names}" th:value="&{name}" th:text="&{name}"></option>

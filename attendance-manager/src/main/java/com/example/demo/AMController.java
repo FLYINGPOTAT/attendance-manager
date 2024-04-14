@@ -105,10 +105,10 @@ public class AMController {
 	}
     @PostMapping("/AttendanceRegister")
 	public void AttendanceRegister(@ModelAttribute DateNameStatus dns) {
-//    	Integer id = jdbcTemplate.queryForObject(
-//				"select id from member where name = '"
-//				+ dns.getName()+"'",int.class);
-    	//String sql= "INSERT INTO member(name, grade) VALUES('"++"', "++")";
-    	//jdbcTemplate.execute(sql);
+    	int id = jdbcTemplate.queryForObject(
+				"select id from member where name = '"
+				+ dns.getName()+"'",int.class);
+    	jdbcTemplate.execute("insert into attendance_status(id, year, month, day, attendance) "
+    			+ "values("+id+","+dns.getYear()+","+dns.getMonth()+","+dns.getDay()+","+dns.getState()+")");
 	}
 }

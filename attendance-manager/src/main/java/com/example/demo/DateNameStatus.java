@@ -6,7 +6,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class DateNameStatus {
-	private String date;
+	private String year;
+	private String month;
+	private String day;
 	private String name;
 	private String state;
 }
