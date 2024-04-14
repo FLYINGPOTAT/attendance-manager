@@ -70,9 +70,14 @@ public class AMController {
     	return "memberRegister";
 	}
     @PostMapping("/memberRegister")
-	public void memberRegister(@ModelAttribute MemberGrade mg) {
-    	String sql= "insert into member(name, grade) values('"+mg.getName()+"', "+mg.getGrade()+")";
-    	jdbcTemplate.execute(sql);
+    public void memberRegister(@ModelAttribute MemberGrade mg) {
+        String sql= "INSERT INTO member(name, grade) VALUES(?,?)";
+        System.out.println(""+mg.getName()+mg.getGrade());
+        jdbcTemplate.update(sql,mg.getName(),mg.getGrade());
+//    @PostMapping("/memberRegister")
+//	public void memberRegister(@ModelAttribute MemberGrade mg) {
+//    	String sql= "insert into member(name, grade) values('"+mg.getName()+"', "+mg.getGrade()+")";
+//    	jdbcTemplate.execute(sql);
 	}
     @RequestMapping("/AttendPointSetting")
 	public ModelAndView attendPointSettingScreen(ModelAndView m) {
