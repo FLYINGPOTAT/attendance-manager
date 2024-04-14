@@ -1,13 +1,11 @@
 package com.example.demo;
 
-import java.util.ArrayList;
-
 public class MemberPointAttendance{
 	private String name;
 	private int point;
-	private ArrayList<String> list;
+	private String[] list;
 	
-	public MemberPointAttendance(String name, int point, ArrayList<String> list){
+	public MemberPointAttendance(String name, int point, String[] list){
 		this.name = name;
 		this.point = point;
 		this.list = list;
@@ -20,7 +18,7 @@ public class MemberPointAttendance{
 		return point;
 	}
 	
-	public ArrayList<String> list(){
+	public String[] list(){
 		return list;
 	}
 	

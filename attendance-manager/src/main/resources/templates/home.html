@@ -20,56 +20,67 @@
     <header></header>
     <h1>Miteath</h1>
     <div>
+		<a href="/AttendanceRegistrationScreen">出席管理</a>
 		<a href="/MemberRegistrationScreen">部員登録</a>
 		<a href="/AttendPointSetting">出欠ポイント設定</a>
     </div>
     <div>
-        <!--<table class="table table01">
-            <script>
-                const now=new Date();
-                const year = now.getFullYear();
-                const month = now.getMonth()+1;
-                const date = now.getDate();
-                var monthDayCountList=[31,28,31,30,31,30,31,31,30,31,30,31]
-                if (month==2){
-                    if(year%4==0){
-                        monthDayCount=29
-                        if(year%400==0){
-                            monthDayCount=29
-                        }else if(year%100==0){
-                            monthDayCount=28
-                        }
-                    }
-                }else{
-                    monthDayCount=monthDayCountList[month-1]
-                }
-                document.write('<tr>');
-                document.write('<th>氏名</th>')
-                color="#b7efb7"
-                for (var i=1;i<=monthDayCount;i++){
-                    if(i==date){
-                        color="green"
-                    }else{
-                        color="#b7efb7"    
-                    }
-                    if(i<10){
-                        document.write('<th bgcolor='+color+'>0'+ i +'</th>')
-                    }else{
-                        document.write('<th bgcolor='+color+'>'+ i +'</th>')
-                    }
-                }
-                
-                document.write('<th>得点</th>')
-                document.write('</tr>')
-            </script>
-            <tr th:each="attend : ${memberHistoryData}">
-                <td th:text="${attend.name}"></a></td>
-                <th:block th:if="${!#lists.isEmpty(attend.data)}" th:each="data: ${attend.list}">
-                    <td th:text="${data}"></td>
-                </th:block>
-                <td th:text="${attend.point}"></td>
-            </tr>
-        </table>-->
+		<table>
+		            <thead>
+		                <script>
+		                    const now=new Date()
+		                    const year = now.getFullYear()
+		                    const month = now.getMonth()+1
+		                    const date = now.getDate()
+		                    var monthDayCountList=[31,28,31,30,31,30,31,31,30,31,30,31]
+		                    if (month==2){
+		                        if(year%4==0){
+		                            monthDayCount=29
+		                            if(year%400==0){
+		                                monthDayCount=29
+		                            }else if(year%100==0){
+		                                monthDayCount=28
+		                            }
+		                        }
+		                    }else{
+		                        monthDayCount=monthDayCountList[month-1]
+		                    }
+		                    document.write('<tr>')
+		                    document.write('<th>氏名</th>')
+		                    color="#b7efb7"
+		                    for (var i=1;i<=monthDayCount;i++){
+		                        if(i==date){
+		                            color="green"
+		                        }else{
+		                            color="#b7efb7"    
+		                        }
+		                        if(i<10){
+		                            document.write('<th bgcolor='+color+'>0'+ i +'</th>')
+		                        }else{
+		                            document.write('<th bgcolor='+color+'>'+ i +'</th>')
+		                        }
+		                    }
+		                
+		                    document.write('<th>得点</th>')
+		                    document.write('</tr>')
+		                </script>
+		            </thead>
+		            <tbody>
+		                <th:block th:each="attend: ${memberHistoryData}">
+							<tr>
+							                        <td th:text="${attend.name}"></a></td>
+							                        <th:block th:each="data:${attend.list}">
+							                            <th:block th:if="${data=='未定'}">
+							                                <td></td>
+							                            </th:block>
+							                            <th:block th:if="${data!='未定'}">
+							                                <td th:text="${data}"></td>
+							                            </th:block>
+							                        </th:block>
+							                    </tr>
+		                </th:block>
+		            </tbody>
+		        </table>
 		<table>
 					        <tr>
 					            <th>name</th>

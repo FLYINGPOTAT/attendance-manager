@@ -1,7 +1,6 @@
 package com.example.demo;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,26 +28,39 @@ public class AMController {
     			+ year + " AND attendance_status.month = " + month;
     	var attList = jdbcTemplate.queryForList(attSql);
     	var memberHistoryData = jdbcTemplate.query("select name from member",
-    			(rs,rowNum) -> new MemberPointAttendance(rs.getString("name"),0,new ArrayList<String>()));
+    			(rs,rowNum) -> new MemberPointAttendance(rs.getString("name"),0,new String[31]));
     	
     	for (var i=0; i<memberHistoryData.size();i++) {
     		var m = memberHistoryData.get(i);
     		var name=m.name();
+    		var statusList=memberHistoryData.get(i).list();
     		for (Map<String, Object> e: attList){
     			if (e.get("name").equals(name)){
-    				Integer point = jdbcTemplate.queryForObject(
+    				int point = jdbcTemplate.queryForObject(
     						"select point from attendance_point where attendance = '"
     						+ e.get("attendance")+"'",int.class);
     				m.addPoint(point);
     				var status = e.get("attendance_status");
-    				if (status == null){
-    					memberHistoryData.get(i).list().add("出席");
+    				if (status != null){
+    					statusList[(Integer)e.get("attendance_status.day")]=status.toString();
+    				}
+    			}
+    		}
+    		Integer day = nowDate.getDayOfMonth();
+    		for(var x=0; x<31;x++) {
+    			if(null == statusList[x]) {
+    				if(x<day-1) {
+    					statusList[x]="出席";
     				}else {
-    					memberHistoryData.get(i).list().add(status.toString());
+    					statusList[x]="未定";
     				}
     			}
     		}
     	}
+    	
+//    	for(var i=0;i<memberHistoryData.get(0).list().size();i++) {
+//    		System.out.println(memberHistoryData.get(0).list().get(i));
+//    	}
     	model.addObject("memberHistoryData", memberHistoryData);
     	model.setViewName("home");
     	return model;
@@ -59,7 +71,7 @@ public class AMController {
 	}
     @PostMapping("/memberRegister")
 	public void memberRegister(@ModelAttribute MemberGrade mg) {
-    	String sql= "INSERT INTO member(name, grade) VALUES('"+mg.getName()+"', "+mg.getGrade()+")";
+    	String sql= "insert into member(name, grade) values('"+mg.getName()+"', "+mg.getGrade()+")";
     	jdbcTemplate.execute(sql);
 	}
     @RequestMapping("/AttendPointSetting")
@@ -76,18 +88,27 @@ public class AMController {
 	}
     @PostMapping("/APSetting")
 	public String APSetting(@ModelAttribute AttendancePoint ap) {
-    	String sql= "INSERT INTO attendance_point(attendance, point) VALUES('"+ap.getAttend()+"', "+ap.getPoint()+")";
+    	String sql= "insert into attendance_point(attendance, point) values('"+ap.getAttend()+"', "+ap.getPoint()+")";
     	jdbcTemplate.execute(sql);
     	return "redirect:/AttendPointSetting";
 	}
     
-//    @RequestMapping("/AttendanceRegistrationScreen")
-//	public String AttendanceRegistrationScreen() {
-//    	return "AttendanceRegistrationScreen";
-//	}
-//    @PostMapping("/AttendanceRegister")
-//	public void AttendanceRegister(@ModelAttribute MemberGrade mg) {
-//    	String sql= "INSERT INTO member(name, grade) VALUES('"+mg.getName()+"', "+mg.getGrade()+")";
-//    	jdbcTemplate.execute(sql);
-//	}
+    @RequestMapping("/AttendanceRegistrationScreen")
+	public ModelAndView AttendanceRegistrationScreen(ModelAndView m) {
+    	var names = jdbcTemplate.queryForList("select name from member");
+    	var status = jdbcTemplate.queryForList("select name from member");
+    	
+    	m.addObject("names",names);
+    	m.addObject("status",status);
+		m.setViewName("AttendanceRegistrationScreen");
+		return m;
+	}
+    @PostMapping("/AttendanceRegister")
+	public void AttendanceRegister(@ModelAttribute DateNameStatus dns) {
+//    	Integer id = jdbcTemplate.queryForObject(
+//				"select id from member where name = '"
+//				+ dns.getName()+"'",int.class);
+    	//String sql= "INSERT INTO member(name, grade) VALUES('"++"', "++")";
+    	//jdbcTemplate.execute(sql);
+	}
 }

@@ -12,4 +12,4 @@ INSERT INTO member(name, grade)
 VALUES('hanako', 2);
 
 INSERT INTO attendance_status(id,year,month,day,attendance)
-VALUES(2, 2024,4,20, '遅刻');
+VALUES(2, 2024,4,11, '遅刻');
