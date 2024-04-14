@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>出席管理</title>
+    <meta name="description" content="ページの説明文">
+    <link rel="stylesheet"href="test.css">
+</head>
+<body><div class="body">
+    <header>
+        <h1>
+            <div>
+            <span class="head1">
+                MiteMath
+            </span>
+            <a class="head2" href="inquiry.html">
+                問い合わせはこちらから
+            </a>
+            </div>
+        </h1>
+    </header>
+    <br>
+    <br>
+    <br>
+    <h2 class="h2">出欠設定(仮)</h2>
+    <h3><div class = "h3">
+        <form action="/APSetting" method="post">
+            日時：<input type="date" name="date"/><br/><br/>
+            氏名：<select name="name">
+                <!--氏名の集合をデータベースから読み込み、選択肢として表示-->
+                <option th:each="name : &{names}" th:value="&{name}" th:text="&{name}"></option>
+                <!--検証用-->
+                <option>hoge</option>
+                <option>fuga</option>
+                <option>piyo</option>
+                <!--ここまで-->
+                </select><br/>
+            出欠状態：<select name="status">
+                <!--出欠状態の集合をデータベースから読み込み、選択肢として表示-->
+                <option th:each="status : &{status}" th:value="&{status}" th:text="&{status}"></option>
+                <!--検証用-->
+                <option>出欠(検)</option>
+                <option>欠席(検)</option>
+                <option>早退(検)</option>
+                <!--ここまで-->
+                </select><br/>
+            <input type="submit" value="送信" />
+            </form>
+    </div>
+    </h3>
+</div>
+</body>
+</html>
