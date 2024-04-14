@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,8 +36,8 @@
                         <th>attendance</th>
                         <th>point</th>
                     </tr>
-                    <tr th:each="t : ${table}">
-                        <td th:text="${t.attendance}"></td>
+                    <tr th:each="t : ${attendancePoints}">
+                        <td th:text="${t.attend}"></td>
                         <td th:text="${t.point}"></td>
                     </tr>
                 </table>

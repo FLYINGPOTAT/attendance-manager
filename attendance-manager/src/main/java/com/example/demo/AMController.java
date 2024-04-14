@@ -7,7 +7,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +19,7 @@ public class AMController {
     private JdbcTemplate jdbcTemplate;
 
     @RequestMapping()
-    public String home(Model model) {
+    public ModelAndView home(ModelAndView model) {
     	LocalDateTime nowDate = LocalDateTime.now();
     	Integer year = nowDate.getYear();
     	Integer month = nowDate.getMonth().getValue();
@@ -29,37 +28,30 @@ public class AMController {
     			+ "WHERE member.id = attendance_status.id AND attendance_status.year = "
     			+ year + " AND attendance_status.month = " + month;
     	var attList = jdbcTemplate.queryForList(attSql);
-    	var memberPoints = jdbcTemplate.query("select name from member",
-    			(rs,rowNum) -> new MemberPoint(rs.getString("name"),0));
+    	var memberHistoryData = jdbcTemplate.query("select name from member",
+    			(rs,rowNum) -> new MemberPointAttendance(rs.getString("name"),0,new ArrayList<String>()));
     	
-    	var attendanceData = new ArrayList<ArrayList<String>>();
-//    	var members = new ArrayList<String>();
-    	
-    	for (var i=0; i<memberPoints.size();i++) {
-    		var m = memberPoints.get(i);
+    	for (var i=0; i<memberHistoryData.size();i++) {
+    		var m = memberHistoryData.get(i);
     		var name=m.name();
     		for (Map<String, Object> e: attList){
     			if (e.get("name").equals(name)){
-//    				members.add(name);
-    				if (attendanceData.size()-1<i) {
-    					attendanceData.add(new ArrayList<String>());
-    				}
     				Integer point = jdbcTemplate.queryForObject(
     						"select point from attendance_point where attendance = '"
     						+ e.get("attendance")+"'",int.class);
     				m.addPoint(point);
     				var status = e.get("attendance_status");
     				if (status == null){
-    					attendanceData.get(i).add("出席");
+    					memberHistoryData.get(i).list().add("出席");
     				}else {
-    					attendanceData.get(i).add((status).toString());
+    					memberHistoryData.get(i).list().add(status.toString());
     				}
     			}
     		}
     	}
-    	model.addAttribute("memberPoints", memberPoints);
-    	model.addAttribute("attendanceData", attendanceData);
-    	return "home";
+    	model.addObject("memberHistoryData", memberHistoryData);
+    	model.setViewName("home");
+    	return model;
     }
     @RequestMapping("/MemberRegistrationScreen")
 	public String memScreen() {
@@ -74,20 +66,25 @@ public class AMController {
 	public ModelAndView attendPointSettingScreen(ModelAndView m) {
     	var attendancePoints = jdbcTemplate.query("select * from attendance_point",
     			(rs,rowNum) -> new AttendancePoint(rs.getString("attendance"),rs.getString("point")));
+    	for (var i=0;i<attendancePoints.size();i++) {
+    		System.out.println(attendancePoints.get(i).getAttend());
+    	}
+    	
     	m.addObject("attendancePoints",attendancePoints);
-		m.setViewName("AttendPointSetting.html");
+		m.setViewName("AttendPointSetting");
 		return m;
 	}
     @PostMapping("/APSetting")
-	public void APSetting(@ModelAttribute AttendancePoint ap) {
+	public String APSetting(@ModelAttribute AttendancePoint ap) {
     	String sql= "INSERT INTO attendance_point(attendance, point) VALUES('"+ap.getAttend()+"', "+ap.getPoint()+")";
     	jdbcTemplate.execute(sql);
+    	return "redirect:/AttendPointSetting";
 	}
     
-    @RequestMapping("/AttendanceRegistrationScreen")
-	public String AttendanceRegistrationScreen() {
-    	return "AttendanceRegistrationScreen";
-	}
+//    @RequestMapping("/AttendanceRegistrationScreen")
+//	public String AttendanceRegistrationScreen() {
+//    	return "AttendanceRegistrationScreen";
+//	}
 //    @PostMapping("/AttendanceRegister")
 //	public void AttendanceRegister(@ModelAttribute MemberGrade mg) {
 //    	String sql= "INSERT INTO member(name, grade) VALUES('"+mg.getName()+"', "+mg.getGrade()+")";
