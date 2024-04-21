@@ -93,20 +93,17 @@ public class AMController {
     
     @RequestMapping("/AttendanceRegistrationScreen")
 	public ModelAndView AttendanceRegistrationScreen(ModelAndView m) {
-    	var names = jdbcTemplate.queryForList("select name from member");
-    	var status = jdbcTemplate.queryForList("select name from member");
-    	
-    	m.addObject("names",names);
-    	m.addObject("status",status);
+    	var members= jdbcTemplate.queryForList("select * from member");
+    	var attendances = jdbcTemplate.queryForList("select attendance from attendance_point");
+    	m.addObject("members",members);
+    	m.addObject("attendances",attendances);
 		m.setViewName("AttendanceRegistrationScreen");
 		return m;
 	}
     @PostMapping("/AttendanceRegister")
-	public void AttendanceRegister(@ModelAttribute DateNameStatus dns) {
-    	int id = jdbcTemplate.queryForObject(
-				"select id from member where name = '"
-				+ dns.getName()+"'",int.class);
+	public String AttendanceRegister(@ModelAttribute DateIdAttendance dia) {
     	jdbcTemplate.execute("insert into attendance_status(id, year, month, day, attendance) "
-    			+ "values("+id+","+dns.getYear()+","+dns.getMonth()+","+dns.getDay()+","+dns.getState()+")");
-	}
+    			+ "values("+dia.getId()+","+dia.getYear()+","+dia.getMonth()+","+dia.getDay()+",'"+dia.getAttendance()+"')");
+    	return "redirect:/AttendanceRegistrationScreen";
+    }
 }

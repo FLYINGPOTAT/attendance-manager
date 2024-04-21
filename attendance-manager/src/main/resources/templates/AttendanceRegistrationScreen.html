@@ -1,84 +1,96 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ja">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>出席管理</title>
-    <meta name="description" content="ページの説明文">
-    <link rel="stylesheet"href="test.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>出席管理</title>
+	<meta name="description" content="ページの説明文">
+	<link rel="stylesheet" href="test.css">
 	<style>
-			.table th,
-			.table td{
-			            border: 1px solid #000;
-			            padding: 1px;
-			        } 
-			.table{
-				border-collapse: collapse;
-			}
-			html{
-			    font-family: "Poppins", sans-serif;
-			}
-			.container {
-			    width:90%;
-			    height:100px;
-			    max-width:1120px;
-			    background: linear-gradient(to bottom,rgb(83,156,0), rgb(138,255,3) 50%,  rgb(83,156,0));
-			    margin:0 auto;
-			}
-			.flex {
-			    display: flex;
-			    justify-content: space-between;
-			    /* flex-wrap: wrap; */
-			    align-items: center;
-			}
-			
-			.logo{
-			    font-size:24px;
-			    font-weight: 700;
-			    color: rgb(56,105,1);
-			}
-			.header_menu li{
-			    margin-left: 40px;
-			    color: rgb(56,105,1);
-			}
-			.header_menu li a:hover{
-			    color: #80BA4A;
-			    transition:.3s;
-			}
-		</style>
+		.table th,
+		.table td {
+			border: 1px solid #000;
+			padding: 1px;
+		}
+
+		.table {
+			border-collapse: collapse;
+		}
+
+		html {
+			font-family: "Poppins", sans-serif;
+		}
+
+		.container {
+			width: 90%;
+			height: 100px;
+			max-width: 1120px;
+			background: linear-gradient(to bottom, rgb(83, 156, 0), rgb(138, 255, 3) 50%, rgb(83, 156, 0));
+			margin: 0 auto;
+		}
+
+		.flex {
+			display: flex;
+			justify-content: space-between;
+			/* flex-wrap: wrap; */
+			align-items: center;
+		}
+
+		.logo {
+			font-size: 24px;
+			font-weight: 700;
+			color: rgb(56, 105, 1);
+		}
+
+		.header_menu li {
+			margin-left: 40px;
+			color: rgb(56, 105, 1);
+		}
+
+		.header_menu li a:hover {
+			color: #80BA4A;
+			transition: .3s;
+		}
+	</style>
 </head>
-<body><div class="body">
-    <header>
-        <div class="container flex">
-            <a href="home.html" class="logo">出席管理システム</a>
-            <nav>
-                <ul class="header_menu flex">
-                    <li><a href="inquiry.html">お問い合わせ</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-    <br>
-    <br>
-    <br>
-    <h2 class="h2">出欠設定(仮)</h2>
-    <h3><div class = "h3">
-        <form action="/APSetting" method="post">
-			年：<input type="number" name="year" min="1900" max="2100" required/><br/>
-			            月：<input type="number" name="month" min="1" max="12" required/><br/>
-			            日：<input type="number" name="day" min="1" max="31" required/><br/><br/>
-            氏名：<select name="name">
-                <!--氏名の集合をデータベースから読み込み、選択肢として表示-->
-                <option th:each="name : &{names}" th:value="&{name}" th:text="&{name}"></option>
-                </select><br/>
-            出欠状態：<select name="status">
-                <!--出欠状態の集合をデータベースから読み込み、選択肢として表示-->
-                <option th:each="status : &{status}" th:value="&{status}" th:text="&{status}"></option>
-                </select><br/>
-            <input type="submit" value="送信" />
-            </form>
-    </div>
-    </h3>
-</div>
+
+<body>
+	<div class="body">
+		<header>
+			<div class="container flex">
+				<a href="home.html" class="logo">出席管理システム</a>
+				<nav>
+					<ul class="header_menu flex">
+						<li><a href="inquiry.html">お問い合わせ</a></li>
+					</ul>
+				</nav>
+			</div>
+		</header>
+		<br>
+		<br>
+		<br>
+		<h2 class="h2">出欠設定(仮)</h2>
+		<h3>
+			<div class="h3">
+				<form action="/AttendanceRegister" method="post">
+					年：<input type="number" name="year" min="1900" max="2100" required /><br />
+					月：<input type="number" name="month" min="1" max="12" required /><br />
+					日：<input type="number" name="day" min="1" max="31" required /><br /><br />
+					氏名：<select class="dropdown form-control" name="id">
+						<!--氏名の集合をデータベースから読み込み、選択肢として表示-->
+						<option th:each="member : ${members}" th:value="${member.id}" th:text="${member.name}"></option>
+					</select><br />
+					出欠状態：<select class="dropdown form-control" Ï name="attendance">
+						<!--出欠状態の集合をデータベースから読み込み、選択肢として表示-->
+						<option th:each="att : ${attendances}" th:value="${att.attendance}" th:text="${att.attendance}">
+						</option>
+					</select><br/>
+					<input type="submit" value="送信" />
+				</form>
+			</div>
+		</h3>
+	</div>
 </body>
+
 </html>

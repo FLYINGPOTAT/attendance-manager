@@ -5,10 +5,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class DateNameStatus {
+public class DateIdAttendance {
 	private String year;
 	private String month;
 	private String day;
-	private String name;
-	private String state;
+	private String id;
+	private String attendance;
 }
