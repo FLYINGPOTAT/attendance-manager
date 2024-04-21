@@ -40,9 +40,9 @@ public class AMController {
     						"select point from attendance_point where attendance = '"
     						+ e.get("attendance")+"'",int.class);
     				m.addPoint(point);
-    				var status = e.get("attendance_status");
+    				var status = e.get("attendance");
     				if (status != null){
-    					statusList[(Integer)e.get("attendance_status.day")]=status.toString();
+    					statusList[(int)e.get("day")-1]=status.toString();
     				}
     			}
     		}
@@ -57,10 +57,6 @@ public class AMController {
     			}
     		}
     	}
-    	
-//    	for(var i=0;i<memberHistoryData.get(0).list().size();i++) {
-//    		System.out.println(memberHistoryData.get(0).list().get(i));
-//    	}
     	model.addObject("memberHistoryData", memberHistoryData);
     	model.setViewName("home");
     	return model;
@@ -69,31 +65,28 @@ public class AMController {
 	public String memScreen() {
     	return "memberRegister";
 	}
-    @PostMapping("/memberRegister")
-    public void memberRegister(@ModelAttribute MemberGrade mg) {
-        String sql= "INSERT INTO member(name, grade) VALUES(?,?)";
-        System.out.println(""+mg.getName()+mg.getGrade());
-        jdbcTemplate.update(sql,mg.getName(),mg.getGrade());
 //    @PostMapping("/memberRegister")
-//	public void memberRegister(@ModelAttribute MemberGrade mg) {
-//    	String sql= "insert into member(name, grade) values('"+mg.getName()+"', "+mg.getGrade()+")";
-//    	jdbcTemplate.execute(sql);
+//    public void memberRegister(@ModelAttribute MemberGrade mg) {
+//        String sql= "INSERT INTO member(name, grade) VALUES(?,?)";
+//        System.out.println(""+mg.getName()+mg.getGrade());
+//        jdbcTemplate.update(sql,mg.getName(),mg.getGrade());
+    @PostMapping("/memberRegister")
+	public void memberRegister(@ModelAttribute MemberGrade mg) {
+    	String sql= "insert into member(name, grade) values('"+mg.getName()+"', "+mg.getGrade()+")";
+    	System.out.println(""+mg.getName()+mg.getGrade());
+    	jdbcTemplate.execute(sql);
 	}
     @RequestMapping("/AttendPointSetting")
 	public ModelAndView attendPointSettingScreen(ModelAndView m) {
     	var attendancePoints = jdbcTemplate.query("select * from attendance_point",
-    			(rs,rowNum) -> new AttendancePoint(rs.getString("attendance"),rs.getString("point")));
-    	for (var i=0;i<attendancePoints.size();i++) {
-    		System.out.println(attendancePoints.get(i).getAttend());
-    	}
-    	
+    			(rs,rowNum) -> new AttendancePoint(rs.getString("attendance"),rs.getString("point")));   	
     	m.addObject("attendancePoints",attendancePoints);
 		m.setViewName("AttendPointSetting");
 		return m;
 	}
     @PostMapping("/APSetting")
 	public String APSetting(@ModelAttribute AttendancePoint ap) {
-    	String sql= "insert into attendance_point(attendance, point) values('"+ap.getAttend()+"', "+ap.getPoint()+")";
+    	String sql= "insert into attendance_point(attendance, point) values('"+ap.getAttendance()+"', "+ap.getPoint()+")";
     	jdbcTemplate.execute(sql);
     	return "redirect:/AttendPointSetting";
 	}

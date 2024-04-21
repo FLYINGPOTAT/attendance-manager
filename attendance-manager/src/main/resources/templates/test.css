@@ -121,11 +121,3 @@ input[type="submit"] {
 input[type="submit"]:hover {
     background-color: #45a049;
 }
-.table th,
-        .table td{
-            border: 1px solid #000;
-            padding: 1px;
-        }
-        .table{
-            border-collapse: collapse;
-        }

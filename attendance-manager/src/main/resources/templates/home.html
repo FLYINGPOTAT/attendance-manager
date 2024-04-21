@@ -1,88 +1,136 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <meta name="description" content="sample/////////">
-	<link rel="stylesheet"href="test.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<meta name="description" content="sample/////////">
+	<link rel="stylesheet" href="test.css">
+	<style>
+		.table th,
+		.table td {
+			border: 1px solid #000;
+			padding: 1px;
+		}
+
+		.table {
+			border-collapse: collapse;
+		}
+
+		html {
+			font-family: "Poppins", sans-serif;
+		}
+
+		.container {
+			width: 90%;
+			height: 100px;
+			max-width: 1120px;
+			background: linear-gradient(to bottom, rgb(83, 156, 0), rgb(138, 255, 3) 50%, rgb(83, 156, 0));
+			margin: 0 auto;
+		}
+
+		.flex {
+			display: flex;
+			justify-content: space-between;
+			/* flex-wrap: wrap; */
+			align-items: center;
+		}
+
+		.logo {
+			font-size: 24px;
+			font-weight: 700;
+			color: rgb(56, 105, 1);
+		}
+
+		.header_menu li {
+			margin-left: 40px;
+			color: rgb(56, 105, 1);
+		}
+
+		.header_menu li a:hover {
+			color: #80BA4A;
+			transition: .3s;
+		}
+	</style>
 </head>
+
 <body>
-    <header>
-        <div class="container flex">
-            <a href="home.html" class="logo">出席管理システム</a>
-            <nav>
-                <ul class="header_menu flex">
-                    <li><a href="inquiry.html">お問い合わせ</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-    <h1>Miteath</h1>
-    <div>
+	<header>
+		<div class="container flex">
+			<a href="home.html" class="logo">出席管理システム</a>
+			<nav>
+				<ul class="header_menu flex">
+					<li><a href="inquiry.html">お問い合わせ</a></li>
+				</ul>
+			</nav>
+		</div>
+	</header>
+	<div>
 		<a href="/AttendanceRegistrationScreen">出席管理</a>
 		<a href="/MemberRegistrationScreen">部員登録</a>
 		<a href="/AttendPointSetting">出欠ポイント設定</a>
-    </div>
-    <div>
+	</div>
+	<div>
 		<table class="table">
-		            <thead>
-		                <script>
-		                    const now=new Date()
-		                    const year = now.getFullYear()
-		                    const month = now.getMonth()+1
-		                    const date = now.getDate()
-		                    var monthDayCountList=[31,28,31,30,31,30,31,31,30,31,30,31]
-		                    if (month==2){
-		                        if(year%4==0){
-		                            monthDayCount=29
-		                            if(year%400==0){
-		                                monthDayCount=29
-		                            }else if(year%100==0){
-		                                monthDayCount=28
-		                            }
-		                        }
-		                    }else{
-		                        monthDayCount=monthDayCountList[month-1]
-		                    }
-		                    document.write('<tr>')
-		                    document.write('<th>氏名</th>')
-							document.write('<th>得点</th>')
-		                    color="#b7efb7"
-		                    for (var i=1;i<=monthDayCount;i++){
-		                        if(i==date){
-		                            color="green"
-		                        }else{
-		                            color="#b7efb7"    
-		                        }
-		                        if(i<10){
-		                            document.write('<th bgcolor='+color+'>0'+ i +'</th>')
-		                        }else{
-		                            document.write('<th bgcolor='+color+'>'+ i +'</th>')
-		                        }
-		                    }
-		                
-		                    
-		                    document.write('</tr>')
-		                </script>
-		            </thead>
-		            <tbody>
-		                <th:block th:each="attend: ${memberHistoryData}">
-							<tr>
-							                        <td th:text="${attend.name}"></a></td>
-													<td th:text="${attend.point}"></a></td>
-							                        <th:block th:each="data:${attend.list}">
-							                            <th:block th:if="${data=='未定'}">
-							                                <td></td>
-							                            </th:block>
-							                            <th:block th:if="${data!='未定'}">
-							                                <td th:text="${data}"></td>
-							                            </th:block>
-							                        </th:block>
-							                    </tr>
-		                </th:block>
-		            </tbody>
-		        </table>
-    </div>
+			<thead>
+				<script>
+					const now = new Date()
+					const year = now.getFullYear()
+					const month = now.getMonth() + 1
+					const date = now.getDate()
+					var monthDayCountList = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+					if (month == 2) {
+						if (year % 4 == 0) {
+							monthDayCount = 29
+							if (year % 400 == 0) {
+								monthDayCount = 29
+							} else if (year % 100 == 0) {
+								monthDayCount = 28
+							}
+						}
+					} else {
+						monthDayCount = monthDayCountList[month - 1]
+					}
+					document.write('<tr>')
+					document.write('<th>氏名</th>')
+					document.write('<th>得点</th>')
+					color = "#b7efb7"
+					for (var i = 1; i <= monthDayCount; i++) {
+						if (i == date) {
+							color = "green"
+						} else {
+							color = "#b7efb7"
+						}
+						if (i < 10) {
+							document.write('<th bgcolor=' + color + '>0' + i + '</th>')
+						} else {
+							document.write('<th bgcolor=' + color + '>' + i + '</th>')
+						}
+					}
+
+
+					document.write('</tr>')
+				</script>
+			</thead>
+			<tbody>
+				<th:block th:each="attend: ${memberHistoryData}">
+					<tr>
+						<td th:text="${attend.name}"></a></td>
+						<td th:text="${attend.point}"></a></td>
+						<th:block th:each="data:${attend.list}">
+							<th:block th:if="${data=='未定'}">
+								<td></td>
+							</th:block>
+							<th:block th:if="${data!='未定'}">
+								<td th:text="${data}"></td>
+							</th:block>
+						</th:block>
+					</tr>
+				</th:block>
+			</tbody>
+		</table>
+	</div>
 </body>
+
 </html>
