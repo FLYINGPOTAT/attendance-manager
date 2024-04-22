@@ -81,18 +81,31 @@ public class AMController {
     	jdbcTemplate.execute(sql);
 	}
     @GetMapping("/AttendPointSetting")
-	public ModelAndView attendPointSettingScreen(ModelAndView m) {
+	public String attendPointSettingScreen(Model m) {
     	var attendancePoints = jdbcTemplate.query("select * from attendance_point",
     			(rs,rowNum) -> new AttendancePoint(rs.getString("attendance"),rs.getString("point")));   	
-    	m.addObject("attendancePoints",attendancePoints);
-		m.setViewName("AttendPointSetting");
-		return m;
+    	m.addAttribute("attendancePoints",attendancePoints);
+//		m.setViewName("AttendPointSetting");
+		return "AttendPointSetting";
 	}
-    @PostMapping("/APSetting")
-	public String APSetting(@ModelAttribute AttendancePoint ap) {
-    	String sql= "insert into attendance_point(attendance, point) values('"+ap.getAttendance()+"', "+ap.getPoint()+")";
-    	jdbcTemplate.execute(sql);
-    	return "redirect:/AttendPointSetting";
+    @PostMapping("/AttendPointSetting")
+	public void APSetting(@ModelAttribute AttendancePoint ap, Model m) {
+    	var existData=jdbcTemplate.queryForList("select * from attendance_point "
+    			+ "where '"+ap.getAttendance()+"' = attendance");
+    	if(existData.isEmpty()) {
+    		String sql= "insert into attendance_point(attendance, point) values('"+ap.getAttendance()+"', "+ap.getPoint()+")";
+        	jdbcTemplate.execute(sql);
+        	m.addAttribute("message","保存しました");
+    	}else {
+    		var data = existData.get(0);
+    		String sql= "update attendance_point set point="+ap.getPoint()+" where attendance='"+ap.getAttendance()+"'";
+        	jdbcTemplate.execute(sql);
+    		m.addAttribute("message","'"+ap.getAttendance()+"'のポイントを変更しました。 "
+        	+data.get("point")+"点 >>> "+ap.getPoint()+"点");
+    	}
+    	var attendancePoints = jdbcTemplate.query("select * from attendance_point",
+    			(rs,rowNum) -> new AttendancePoint(rs.getString("attendance"),rs.getString("point")));   	
+    	m.addAttribute("attendancePoints",attendancePoints);
 	}
     
     @GetMapping("/AttendanceRegistrationScreen")
@@ -113,15 +126,21 @@ public class AMController {
     			+dia.getId()+" and attendance_status.year = "
     			+dia.getYear()+" and attendance_status.month = "
     			+dia.getMonth()+" and attendance_status.day = "+dia.getDay());
-    	System.out.println(existData);
+//    	System.out.println(existData);
     	if(existData.isEmpty()) {
 	    	jdbcTemplate.execute("insert into attendance_status(id, year, month, day, attendance) "
 	    	+ "values("+dia.getId()+","+dia.getYear()+","+dia.getMonth()+","+dia.getDay()+",'"+dia.getAttendance()+"')");
 	    	m.addAttribute("message","保存しました");
     	}else {
     		var data = existData.get(0);
-    		String msg=data.get("year")+"年"+data.get("month")+"月"+data.get("day")+"日 "
-    		+data.get("name")+" : "+data.get("attendance")+"と既に保存されています";
+    		String sql= "update attendance_status set attendance='"+dia.getAttendance()
+    		+"' where id="+dia.getId()+" and year="+data.get("year")+" and month="+data.get("month")
+    		+" and day="+data.get("day");
+        	jdbcTemplate.execute(sql);
+    		String msg=data.get("name")+"の出席状況を変更しました。 "
+    		+data.get("year")+"年"+data.get("month")+"月"+data.get("day")+"日: "
+    		+data.get("attendance")+" >>> "+dia.getAttendance();
+    		
     		m.addAttribute("message",msg);
     	}
     	var members= jdbcTemplate.queryForList("select * from member");
