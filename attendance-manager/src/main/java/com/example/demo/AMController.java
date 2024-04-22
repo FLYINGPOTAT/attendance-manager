@@ -6,9 +6,10 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -17,7 +18,7 @@ public class AMController {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @RequestMapping()
+    @GetMapping()
     public ModelAndView home(ModelAndView model) {
     	LocalDateTime nowDate = LocalDateTime.now();
     	Integer year = nowDate.getYear();
@@ -61,9 +62,12 @@ public class AMController {
     	model.setViewName("home");
     	return model;
     }
-    @RequestMapping("/MemberRegistrationScreen")
-	public String memScreen() {
-    	return "memberRegister";
+    @GetMapping("/MemberRegistrationScreen")
+	public ModelAndView memScreen(ModelAndView m) {
+    	var members = jdbcTemplate.queryForList("select * from member");   	
+    	m.addObject("members",members);
+		m.setViewName("memberRegister");
+    	return m;
 	}
 //    @PostMapping("/memberRegister")
 //    public void memberRegister(@ModelAttribute MemberGrade mg) {
@@ -76,7 +80,7 @@ public class AMController {
     	System.out.println(""+mg.getName()+mg.getGrade());
     	jdbcTemplate.execute(sql);
 	}
-    @RequestMapping("/AttendPointSetting")
+    @GetMapping("/AttendPointSetting")
 	public ModelAndView attendPointSettingScreen(ModelAndView m) {
     	var attendancePoints = jdbcTemplate.query("select * from attendance_point",
     			(rs,rowNum) -> new AttendancePoint(rs.getString("attendance"),rs.getString("point")));   	
@@ -91,19 +95,41 @@ public class AMController {
     	return "redirect:/AttendPointSetting";
 	}
     
-    @RequestMapping("/AttendanceRegistrationScreen")
-	public ModelAndView AttendanceRegistrationScreen(ModelAndView m) {
+    @GetMapping("/AttendanceRegistrationScreen")
+	public String AttendanceRegistrationScreen(Model m) {
     	var members= jdbcTemplate.queryForList("select * from member");
     	var attendances = jdbcTemplate.queryForList("select attendance from attendance_point");
-    	m.addObject("members",members);
-    	m.addObject("attendances",attendances);
-		m.setViewName("AttendanceRegistrationScreen");
-		return m;
+    	m.addAttribute("members",members);
+    	m.addAttribute("attendances",attendances);
+//		m.setViewName("AttendanceRegistrationScreen");
+//		return m;
+    	return "AttendanceRegistrationScreen";
 	}
-    @PostMapping("/AttendanceRegister")
-	public String AttendanceRegister(@ModelAttribute DateIdAttendance dia) {
-    	jdbcTemplate.execute("insert into attendance_status(id, year, month, day, attendance) "
-    			+ "values("+dia.getId()+","+dia.getYear()+","+dia.getMonth()+","+dia.getDay()+",'"+dia.getAttendance()+"')");
-    	return "redirect:/AttendanceRegistrationScreen";
+    @PostMapping("/AttendanceRegistrationScreen")
+	public void AttendanceRegister(@ModelAttribute DateIdAttendance dia, Model m) {
+    	var existData=jdbcTemplate.queryForList("select member.name, attendance_status.year, attendance_status.month, "
+    			+ "attendance_status.day, attendance_status.attendance from attendance_status, member "
+    			+ "where member.id = attendance_status.id and member.id = "
+    			+dia.getId()+" and attendance_status.year = "
+    			+dia.getYear()+" and attendance_status.month = "
+    			+dia.getMonth()+" and attendance_status.day = "+dia.getDay());
+    	System.out.println(existData);
+    	if(existData.isEmpty()) {
+	    	jdbcTemplate.execute("insert into attendance_status(id, year, month, day, attendance) "
+	    	+ "values("+dia.getId()+","+dia.getYear()+","+dia.getMonth()+","+dia.getDay()+",'"+dia.getAttendance()+"')");
+	    	m.addAttribute("message","保存しました");
+    	}else {
+    		var data = existData.get(0);
+    		String msg=data.get("year")+"年"+data.get("month")+"月"+data.get("day")+"日 "
+    		+data.get("name")+" : "+data.get("attendance")+"と既に保存されています";
+    		m.addAttribute("message",msg);
+    	}
+    	var members= jdbcTemplate.queryForList("select * from member");
+    	var attendances = jdbcTemplate.queryForList("select attendance from attendance_point");
+    	m.addAttribute("members",members);
+    	m.addAttribute("attendances",attendances);
+//    	m.setViewName("AttendanceRegistrationScreen");
+//		return m;
+//    	return "redirect:/AttendanceRegistrationScreen";
     }
 }

@@ -164,11 +164,13 @@
 		<div class="header">
 			<h1>Register画面</h1>
 		</div>
+		<div>
+			<h3>
+				<a href="/">ホームに戻る</a>
+			</h3>
+		</div>
 		<form action="/memberRegister" method="post">
 			<div class="form-group">
-				<br>
-				<br>
-				<br>
 				<label for="add_grade">学年:</label>
 				<select name="grade">
 					<option value="1">1年生</option>
@@ -187,6 +189,21 @@
 				<input type="submit" id="add_button" value="送信">
 			</div>
 		</form>
+
+		<h3>部員一覧</h3>
+		<table class="table">
+			<tr>
+				<th>id</th>
+				<th>名前</th>
+				<th>学年</th>
+			</tr>
+			<tr th:each="m : ${members}">
+				<td th:text="${m.id}"></td>
+				<td th:text="${m.name}"></td>
+				<td th:text="${m.grade}"></td>
+			</tr>
+		</table>
+
 	</div>
 </body>
 
