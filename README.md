@@ -8,7 +8,7 @@
 ![スクリーン ショット 2024-04-25 に 16 52 31 午後](https://github.com/FLYINGPOTAT/attendance-manager/assets/99582134/96d75c46-9983-4886-b66e-78c84bdd9861)
 
 ### 1. 部員登録
-1-1. '部員登録'をクリック
+1-1. '部員管理'をクリック
 <img width="1920" alt="image" src="https://github.com/FLYINGPOTAT/attendance-manager/assets/99582134/20950d09-c87d-44b0-8413-217e660a2367">
 
 1-2. 遷移先のページで情報を入力
