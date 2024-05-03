@@ -189,7 +189,7 @@
 				<input type="submit" id="add_button" value="送信">
 			</div>
 		</form>
-
+		
 		<h3>部員一覧</h3>
 		<table class="table">
 			<tr>
@@ -201,6 +201,12 @@
 				<td th:text="${m.id}"></td>
 				<td th:text="${m.name}"></td>
 				<td th:text="${m.grade}"></td>
+				<td>
+					<form 	action="/deleteMember" method="post">
+						<input type="hidden" name="id" th:value="${m.id}">
+						<input type="submit" value="削除">
+					</form>
+				</td>
 			</tr>
 		</table>
 

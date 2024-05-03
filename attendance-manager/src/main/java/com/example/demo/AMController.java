@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -75,11 +76,21 @@ public class AMController {
 //        System.out.println(""+mg.getName()+mg.getGrade());
 //        jdbcTemplate.update(sql,mg.getName(),mg.getGrade());
     @PostMapping("/memberRegister")
-	public void memberRegister(@ModelAttribute MemberGrade mg) {
+	public ModelAndView memberRegister(@ModelAttribute MemberGrade mg, ModelAndView m) {
     	String sql= "insert into member(name, grade) values('"+mg.getName()+"', "+mg.getGrade()+")";
-    	System.out.println(""+mg.getName()+mg.getGrade());
+    	//System.out.println(""+mg.getName()+mg.getGrade());
     	jdbcTemplate.execute(sql);
+    	return memScreen(m);
 	}
+    @PostMapping("/deleteMember")
+    public ModelAndView deleteMember(ModelAndView m, @RequestParam("id") String id) {
+//    	System.out.println(id);
+    	jdbcTemplate.execute("set foreign_key_checks = 0");
+    	jdbcTemplate.execute("delete from member where id = "+id);
+    	jdbcTemplate.execute("set foreign_key_checks = 1");
+    	return memScreen(m);
+    }
+    
     @GetMapping("/AttendPointSetting")
 	public String attendPointSettingScreen(Model m) {
     	var attendancePoints = jdbcTemplate.query("select * from attendance_point",
